@@ -1,0 +1,30 @@
+.modalBackground {
+    width: 100%;
+    position: absolute;
+    backdrop-filter: blur(10px);
+    height: 300%;
+    top: 0;
+    left: 0;
+    scroll-behavior: auto;
+}
+
+.modalContainer {
+    width: 500px;
+    height: 200px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 0px;
+    margin-top: 300px;
+}
+
+.modalContainer .body {
+    flex: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    text-align: center;
+    width:  300px;
+    height: 200px;
+}
+
+
+
