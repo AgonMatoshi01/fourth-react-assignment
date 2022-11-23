@@ -8,23 +8,23 @@ const Search = () => {
     const [searchTearm, setSearchTearm] = useState("Plane")
     const [results, setResults] = useState([]);
     const [modal, setModal] = useState(false)
-    const [toBeDesplayd, setToBeDesplayd] = useState(null)
+    const [srcPath, setSrcPath] = useState("")
 
     const Search = async (search) => {
         const url = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=636e1481b4f3c446d26b8eb6ebfe7127&tags=${search} &per_page=24&format=json&nojsoncallback=1`
-        const {data} = await axios.get(url);
-        setResults(data.photos.photo)
+        const {data: {photos: {photo}}} = await axios.get(url);
+        return photo
     }
-
     useEffect(() => {
-        Search(searchTearm)
+            Search(searchTearm)
+                .then(r=>setResults(r))
+                .catch(e=>console.log(e.message))
     }, [searchTearm])
 
-    const getPhoto = (selectedPhoto) => {
-        setToBeDesplayd(selectedPhoto)
+    const getPhoto = ( srcP) => {
         setModal(true);
+        setSrcPath(srcP);
     }
-
 
     const handleKeyPress = e => {
         if (e.key === "Enter")
@@ -35,13 +35,13 @@ const Search = () => {
         setInputTearm(buttonText);
     }
     const renderedResults = results?.map((result) => {
-        const {farm, server, id, secret} = result;
+        const { server, id, secret} = result;
 
-        const srcPath = 'https://farm' + farm + '.staticflickr.com/' + server + '/' + id + '_' + secret + '.jpg';
+        const srcPath = 'https://live.staticflickr.com/' + server + '/' + id + '_' + secret + '.jpg';
         return (
             <div key={id}>
                 <img src={srcPath} alt="" onClick={() => {
-                    getPhoto(result)
+                    getPhoto(srcPath)
                     window.scrollTo({
                             top: 0,
                             left: 0,
@@ -53,8 +53,7 @@ const Search = () => {
         )
     })
     return (
-
-        <div>
+        <>
             <div className="ui large icon input">
                 <input
                     placeholder={"Search..."}
@@ -71,13 +70,13 @@ const Search = () => {
                     <button className="ui secondary button" onClick={() => handleButton("Music")}>Music</button>
                 </div>
                 <h3>{searchTearm} Images</h3>
-                {modal && <Modal photo={toBeDesplayd} modalVisible={setModal}></Modal>}
+                {modal && <Modal modalVisible={setModal} srcPath={srcPath}></Modal>}
             </div>
             <div className="cards">
                 {renderedResults}
             </div>
 
-        </div>
+        </>
     )
 }
 export default Search;
