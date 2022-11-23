@@ -24,6 +24,8 @@ const Search = () => {
         setToBeDesplayd(selectedPhoto)
         setModal(true);
     }
+
+
     const handleKeyPress = e => {
         if (e.key === "Enter")
             setSearchTearm(inputTerm)

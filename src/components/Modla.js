@@ -23,7 +23,7 @@ const Modal = ({modalVisible, photo}) => {
                         <img
                             src={srcPath} alt=""
                             onClick={
-                                window.removeEventListener('keydown', handleEsc)
+                                () => window.removeEventListener('keydown', handleEsc)
                             }
                         />
                     </div>
