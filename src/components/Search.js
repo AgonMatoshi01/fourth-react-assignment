@@ -5,45 +5,34 @@ import './Search.css'
 
 const Search = () => {
     const [inputTerm, setInputTearm] = useState("")
-    const [search, setSearch] = useState("Plane")
+    const [searchTearm, setSearchTearm] = useState("Plane")
     const [results, setResults] = useState([]);
     const [modal, setModal] = useState(false)
     const [toBeDesplayd, setToBeDesplayd] = useState(null)
 
-    const inputSearch = async (search) => {
+    const Search = async (search) => {
         const url = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=636e1481b4f3c446d26b8eb6ebfe7127&tags=${search} &per_page=24&format=json&nojsoncallback=1`
         const {data} = await axios.get(url);
-        // setResults(data.photos.photo);
-        return data.photos.photo;
+        setResults(data.photos.photo)
     }
 
     useEffect(() => {
-        inputSearch(search).then(r => {
-            setResults(r);
-        })
-    }, [search])
+        Search(searchTearm)
+    }, [searchTearm])
 
-    const handleEsc = (e) => {
-        if (e.keyCode === 27) {
-            setModal(false)
-        }
-    };
-    window.addEventListener('keydown', handleEsc);
-
-    const getPhoto = (user) => {
-        setToBeDesplayd(user)
+    const getPhoto = (selectedPhoto) => {
+        setToBeDesplayd(selectedPhoto)
         setModal(true);
-
     }
     const handleKeyPress = e => {
-        console.log(e)
         if (e.key === "Enter")
-            setSearch(inputTerm)
+            setSearchTearm(inputTerm)
     }
     const handleButton = (buttonText) => {
-        setSearch(buttonText);
+        setSearchTearm(buttonText);
+        setInputTearm(buttonText);
     }
-    const renderedResults = results.map((result) => {
+    const renderedResults = results?.map((result) => {
         const {farm, server, id, secret} = result;
 
         const srcPath = 'https://farm' + farm + '.staticflickr.com/' + server + '/' + id + '_' + secret + '.jpg';
@@ -51,7 +40,6 @@ const Search = () => {
             <div key={id}>
                 <img src={srcPath} alt="" onClick={() => {
                     getPhoto(result)
-                    window.removeEventListener('keydown', handleEsc);
                     window.scrollTo({
                             top: 0,
                             left: 0,
@@ -77,10 +65,10 @@ const Search = () => {
                 <div className="buttons">
                     <button className="ui secondary button" onClick={() => handleButton("Earth")}>Earth</button>
                     <button className="ui secondary button" onClick={() => handleButton("Mobile")}>Mobile</button>
-                    <button className="ui secondary button" onClick={() => handleButton("Naruto")}>Naruto</button>
+                    <button className="ui secondary button" onClick={() => handleButton("Moon")}>Moon</button>
                     <button className="ui secondary button" onClick={() => handleButton("Music")}>Music</button>
                 </div>
-                <h3>{search} Images</h3>
+                <h3>{searchTearm} Images</h3>
                 {modal && <Modal photo={toBeDesplayd} modalVisible={setModal}></Modal>}
             </div>
             <div className="cards">
